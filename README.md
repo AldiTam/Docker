@@ -72,7 +72,10 @@ Docker Desktop is an application you install on development systems that provide
 
 **Example 1: Whalesay Container**
 Run the Whalesay Container with the following command:
+
 ``` docker run docker/whalesay cowsay "Hey Team! 👋" ``` 
+
+a
 
 
 
