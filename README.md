@@ -255,3 +255,24 @@ exit
 Where is this data located? On linux it would be at `/var/lib/docker/volumes`... but remember, on docker desktop, Docker runs a linux virtual machine.
 
 One way we can view the filesystem of that VM is to use a [container image](https://hub.docker.com/r/justincormack/nsenter1) created by `justincormat` that allows us to create a container within the namespace of PID 1. This effectively gives us a container with root access in that VM. 
+
+#### ii. Bind Mounts
+
+Alternatively, we can mount a directory from the host system using a bind mount:
+
+```bash
+# Create a container that mounts a directory from the host filesystem into the container
+docker run  -it --rm --mount type=bind,source="${PWD}"/my-data,destination=/my-data ubuntu:22.04
+# Again, there is a similar (but shorter) syntax using -v which accomplishes the same
+docker run  -it --rm -v ${PWD}/my-data:/my-data ubuntu:22.04
+
+echo "Hello from the container!" > /my-data/hello.txt
+
+# You should also be able to see the hello.txt file on your host system
+cat my-data/hello.txt
+exit
+```
+
+Bind mounts can be nice if you want easy visibility into the data being stored, but there are a number of reasons outlined at https://docs.docker.com/storage/volumes/ (including speed if you are running Docker Desktop on windows/mac) for why volumes are preferred. 
+
+
