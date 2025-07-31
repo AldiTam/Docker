@@ -622,7 +622,7 @@ Examples of popular container registries include:
 - [Nexus](https://blog.sonatype.com/nexus-as-a-container-registry)
 - [Harbor](https://goharbor.io/)
 
-## Authenticating to Container Registries
+### Authenticating to Container Registries
 
 While you can pull many public images from registries without authenticating, in order to push images to a registry, or pull a private image, you will need to authentic
 
@@ -631,3 +631,32 @@ Docker can login directly to some registries with basic authentication (username
 If available, Docker can also store the credentials in a secure store (`macOS keychain`, `Windows Credential Manager`) to help protect those credentials.
 
 ![](./readme-assets/credential-helper.jpg)
+
+## 8. Running Containers (with Docker)
+
+There are two primary ways to run docker containers, with `docker run` and `docker compose up`. 
+
+![](./readme-assets/docker-run-compose.jpeg)
+
+Docker run takes a single container image and runs a container based on it, while docker compose takes a specification of 1 or more services and can build container images for them and/or run containers from those images.
+
+Generally `docker run` is preferable for one off quick use cases (for example those described in `04-using-3rd-party-containers`) while docker compose is preferable if you are developing a containerized application with more than one service.
+
+### individual docker run commands
+
+The portion of the Makefile labeled `### DOCKER CLI COMMANDS` shows the commands can would use to build and run all of these services. To build the images and then run them you can execute:
+
+```bash
+make docker-build-all
+make docker-run-all
+```
+
+***Note:*** Because the Dockerfiles and application source code are located in different directories, the build commands appear more complicated than they actually are. Generally the Dockerfile would live alongside the application and the command would be more like `docker build -t <TAG> .` (and docker defaults to choosing the Dockerfile in the local directory).
+
+You will notice that each of the run commands has a bunch of options used to ensure the configuration works properly.
+
+- Uses the default docker bridge network
+- Uses `--link` to enable easy host name for network connections
+- Publishing ports (`-p` option) useful to connect to each service individually from host, but only necessary to connect to the frontend
+- Named containers make it easier to reference (e.g. with link), but does require removing them to avoid naming conflict
+- Restart policy allows docker to restart the container (for example if database weren't up yet causing one of the api servers to crash)
