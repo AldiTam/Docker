@@ -682,7 +682,7 @@ Documentation: https://docs.docker.com/engine/reference/run/.
 All of the command line flags/options can also be specified them within a compose file: https://docs.docker.com/compose/compose-file/
 
 Here are a set of options everyone should know:
-```
+```bash
 -d #(Detach): Run a container in the background.
 --entrypoint #(Entry Point): Override the entry point defined in the Dockerfile.
 --env, -e, --env-file #(Environment Variables): Set environment variables at runtime
