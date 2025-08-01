@@ -660,3 +660,60 @@ You will notice that each of the run commands has a bunch of options used to ens
 - Publishing ports (`-p` option) useful to connect to each service individually from host, but only necessary to connect to the frontend
 - Named containers make it easier to reference (e.g. with link), but does require removing them to avoid naming conflict
 - Restart policy allows docker to restart the container (for example if database weren't up yet causing one of the api servers to crash)
+
+### Docker compose
+
+Using docker compose allows encoding all of the logic from the `docker build` and `docker run` commands into a single file. Docker compose also manages naming of the container images and containers, attaching to logs from all the containers at runtime, etc...
+
+The `docker-compose.yml` file and the portion of the Makefile labeled `### DOCKER COMPOSE COMMANDS` shows how you can use docker compose to build and run the services. To build and run them you can execute
+
+```bash
+make compose-up-build
+```
+
+As you can see, this is much simpler than needing to execute all of the individual build/run commands and provides a clear way to specify the entire application stack in a single file!
+
+### Important Configuration Options
+
+The example shows many configuration options, but does not cover them all.
+
+Documentation: https://docs.docker.com/engine/reference/run/.
+
+All of the command line flags/options can also be specified them within a compose file: https://docs.docker.com/compose/compose-file/
+
+Here are a set of options everyone should know:
+```
+-d #(Detach): Run a container in the background.
+--entrypoint #(Entry Point): Override the entry point defined in the Dockerfile.
+--env, -e, --env-file #(Environment Variables): Set environment variables at runtime
+--init #(Initialization): Run Docker's initialization script and spawn the process as a subprocess.
+--interactive, -i #(Interactive) and -t (TTY): Have an interactive TTY session inside the container.
+--mount, --volume, -v #(Volume): Persist data outside of the container layer in a volume.
+--name #(Name): Provide a specific name for a container.
+--network, --net #(Network): Connect to a specific Docker network.
+--platform #(Platform): Specify the architecture to run the container image.
+--publish, -p #(Publish): Connect a port from the host system to that of the container.
+--restart #(Restart): Restart the container based on the specified policy (always, unless-stopped or never).
+--rm  
+--tty, -t
+```
+
+Here are a set of less commonly used options, but still worth knowing about:
+
+```bash
+--cap-add, --cap-drop
+--cgroup-parent
+--cpu-shares
+--cpuset-cpus (pin execution to specific CPU cores)
+--device-cgroup-rule,
+--device-read-bps, --device-read-iops, --device-write-bps, --device-write-iops
+--gpus (NVIDIA Only)
+--health-cmd, --health-interval, --health-retries, --health-start-period, --health-timeout
+--memory , -m
+--pid, --pids-limit
+--privileged
+--read-only
+--security-opt
+--userns
+```
+
